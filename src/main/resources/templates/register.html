@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Регистрация | The Encore</title>
+
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --burgundy: #722F37;
+            --dark-gray: #2c3e50;
+            --gold: #C5A880;
+            --light-text: rgba(244, 238, 224, 0.95);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--dark-gray);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(44, 62, 80, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 0 30px rgba(197, 168, 128, 0.4),
+                        0 10px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            color: var(--light-text);
+            font-weight: 400;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--light-text);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(197, 168, 128, 0.3);
+            color: var(--light-text);
+        }
+
+        .btn-custom {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--dark-gray);
+        }
+
+        .btn-primary:hover {
+            background-color: #b08f60;
+            border-color: #b08f60;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--gold);
+            color: var(--dark-gray);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="text-center">Создать аккаунт</h2>
+
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            [[${error}]]
+        </div>
+
+        <form th:action="@{/register}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Телефон</label>
+                <input type="tel" class="form-control" id="phone" name="phone"
+                       pattern="(\+7|8)[0-9]{10}"
+                       title="Формат: +71234567890 или 81234567890">
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="mail"
+                       pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                       title="Введите корректный email">
+            </div>
+            <button type="submit" class="btn btn-primary btn-custom w-100 mb-3">Зарегистрироваться</button>
+            <div class="text-center">
+                <a th:href="@{/login}" class="btn btn-outline-secondary btn-custom w-100">Назад к входу</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

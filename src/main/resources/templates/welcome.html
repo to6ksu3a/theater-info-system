@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Encore</title>
+
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --burgundy: #722F37;
+            --dark-gray: #2c3e50;
+            --gold: #C5A880;
+            --light-text: rgba(244, 238, 224, 0.95);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, var(--burgundy), var(--dark-gray), #4a4a4a, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .platform-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+        }
+
+        .quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: var(--light-text);
+            line-height: 1.6;
+            margin: 3rem 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .auth-card {
+            background: rgba(44, 62, 80, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow:
+                0 0 30px rgba(197, 168, 128, 0.4),
+                0 10px 40px rgba(0,0,0,0.3);
+            margin-top: 3rem;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            min-width: 400px;
+        }
+
+        .btn-custom {
+            padding: 16px 45px;
+            margin: 20px;
+            border-radius: 35px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--dark-gray);
+        }
+
+        .btn-primary:hover {
+            background-color: #b08f60;
+            border-color: #b08f60;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--gold);
+            color: var(--gold);
+            background-color: transparent;
+            border-width: 2px;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #b08f60;
+            border-color: #b08f60;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        @media (max-width: 768px) {
+            .platform-title {
+                font-size: 3rem;
+            }
+
+            .quote {
+                font-size: 1.3rem;
+                padding: 0 1rem;
+            }
+
+            .auth-card {
+                min-width: 90%;
+                padding: 2rem;
+            }
+
+            .btn-custom {
+                padding: 14px 35px;
+                margin: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="hero-section">
+    <h1 class="platform-title mb-4">THE ENCORE</h1>
+
+    <div class="quote">
+        "Театр - это искусство отражать жизнь, и в то же время - окно в мир воображаемого"
+    </div>
+
+    <div class="auth-card">
+        <div class="d-grid gap-2">
+            <a th:href="@{/login}" class="btn btn-primary btn-custom">
+                Войти в систему
+            </a>
+
+            <a th:href="@{/register}" class="btn btn-outline-primary btn-custom">
+                Зарегистрироваться
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

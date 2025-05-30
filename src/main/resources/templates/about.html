@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Об авторе | The Encore</title>
+
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Подключение шрифтов -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --burgundy: #722F37;
+            --dark-gray: #2c3e50;
+            --gold: #C5A880;
+            --light-text: rgba(244, 238, 224, 0.95);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(
+                120deg,
+                var(--burgundy),
+                var(--dark-gray),
+                #3a3a3a
+            );
+            font-family: 'Roboto', sans-serif;
+            color: var(--light-text);
+        }
+
+        .navbar {
+            background: rgba(44, 62, 80, 0.95) !important;
+            backdrop-filter: blur(4px);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold) !important;
+            letter-spacing: 1px;
+        }
+
+        .author-card {
+            background: rgba(44, 62, 80, 0.95);
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            box-shadow:
+                0 0 30px rgba(197, 168, 128, 0.4),
+                0 10px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .author-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .tech-list {
+            list-style-type: none;
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-list li {
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .tech-list li:hover {
+            transform: translateX(10px);
+        }
+
+        .tech-list li::before {
+            content: "▹";
+            color: var(--gold);
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .contact-link {
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--gold);
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-link:hover {
+            opacity: 0.8;
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .author-card {
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+
+            .author-info h2 {
+                font-size: 1.75rem;
+            }
+
+            .tech-list li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="author-card">
+        <div class="author-info">
+            <h2>Колпакова Ксения Александровна</h2>
+            <p class="lead" style="font-size: 1.25rem; color: var(--light-text);">
+                Студентка группы ТРПО23-4<br>
+                Факультет информационных технологий и анализа больших данных<br>
+                Финансовый университет при Правительстве РФ
+            </p>
+
+            <h2>Контактные данные</h2>
+            <ul class="tech-list">
+                <li>Email: <a href="mailto:233541@edu.fa.ru" class="contact-link">233541@edu.fa.ru</a></li>
+                <li>GitHub: <a href="https://github.com/to6ksu3a" class="contact-link">github.com/to6ksu3a</a></li>
+            </ul>
+
+            <h2>Опыт работы с технологиями</h2>
+            <ul class="tech-list">
+                <li><strong>Java (Spring Boot)</strong> - основной язык бэкенда, фреймворк для создания REST API, безопасности и работы с БД</li>
+                <li><strong>Thymeleaf</strong> - шаблонизатор для генерации HTML на сервере</li>
+                <li><strong>Bootstrap 5</strong> - CSS-фреймворк для адаптивного дизайна интерфейса</li>
+                <li><strong>SQL (PostgreSQL)</strong> - язык запросов для работы с реляционной базой данных</li>
+                <li><strong>HTML/CSS</strong> - верстка пользовательского интерфейса, кастомные стили</li>
+            </ul>
+
+            <h2>Сроки разработки проекта</h2>
+            <ul class="tech-list">
+                <li>Начало: 18 марта 2025 года</li>
+                <li>Завершение: 25 мая 2025 года</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

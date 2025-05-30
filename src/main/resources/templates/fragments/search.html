@@ -1,0 +1,63 @@
+<div th:fragment="search(currentFilters, selectedAgeRatings, allGenres)" class="filters">
+    <form th:action="${formAction}" method="get">
+        <div class="row g-3">
+            <!-- Название -->
+            <div class="col-md-2">
+                <input type="text" name="title" class="form-control" placeholder="Название"
+                       th:value="${currentFilters.title}">
+            </div>
+
+            <!-- Жанр -->
+            <div class="col-md-2">
+                <select name="genre" class="form-select">
+                    <option value="">Все жанры</option>
+                    <option th:each="g : ${allGenres}" th:value="${g}"
+                            th:text="${g.displayName}" th:selected="${currentFilters.genre == g}"></option>
+                </select>
+            </div>
+
+            <!-- Длительность -->
+            <div class="col-md-2">
+                <input type="number" name="minDuration" min="0" class="form-control"
+                       placeholder="Мин. длит. (мин)"
+                       th:value="${currentFilters.minDuration != 0} ? ${currentFilters.minDuration} : ''">
+            </div>
+
+            <!-- Дата -->
+            <div class="col-md-2">
+                <input type="date" name="startDate" class="form-control"
+                       th:value="${currentFilters.startDate}">
+            </div>
+
+            <!-- Возрастной рейтинг -->
+            <div class="col-md-2">
+                <div class="dropdown">
+                    <button class="form-select text-start dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Возраст
+                    </button>
+                    <ul class="dropdown-menu p-3">
+                        <div th:each="rating : ${T(ru.theater.info.enumModel.AgeRating).values()}">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="ageRatings"
+                                       th:value="${rating}" th:id="${'filterRating_' + rating.name()}"
+                                       th:checked="${#lists.contains(selectedAgeRatings, rating)}">
+                                <label class="form-check-label" th:for="${'filterRating_' + rating.name()}"
+                                       th:text="${rating.displayName}"></label>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Кнопка -->
+            <div class="col-md-2 btn-filter-container">
+                <button type="submit" class="btn btn-filter w-100">Найти</button>
+            </div>
+        </div>
+
+        <!-- Скрытые поля сортировки -->
+        <input type="hidden" name="sortBy" th:value="${currentFilters.sortBy}" />
+        <input type="hidden" name="direction" th:value="${currentFilters.direction}" />
+    </form>
+</div>

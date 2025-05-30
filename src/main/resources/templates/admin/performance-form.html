@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${performance.id != null} ? 'Редактирование' : 'Новая постановка'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --burgundy: #722F37;
+            --dark-gray: #2c3e50;
+            --gold: #C5A880;
+            --light-text: rgba(244, 238, 224, 0.95);
+        }
+
+        body {
+            background: linear-gradient(120deg, var(--burgundy), var(--dark-gray), #3a3a3a);
+            color: var(--light-text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(44, 62, 80, 0.95) !important;
+            backdrop-filter: blur(4px);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold) !important;
+            letter-spacing: 1px;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(44, 62, 80, 0.95);
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 15px rgba(197, 168, 128, 0.2);
+        }
+
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--light-text);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 0.25rem rgba(197, 168, 128, 0.25);
+            color: var(--light-text);
+        }
+
+        .btn-primary {
+            background-color: var(--gold) !important;
+            border-color: var(--gold);
+            color: var(--dark-gray) !important;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-select option {
+            background-color: var(--dark-gray);
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="form-container">
+    <h2 class="mb-4" th:text="${performance.id != null} ? 'Редактирование постановки' : 'Новая постановка'"></h2>
+
+    <form th:action="${performance.id != null} ?
+                      @{/admin/performances/{id}(id=${performance.id})} :
+                      @{/admin/performances}"
+          method="post"
+          th:object="${performance}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:field="*{id}" th:if="${performance.id != null}">
+
+        <div class="mb-3">
+            <label class="form-label">Название</label>
+            <input type="text" class="form-control" th:field="*{title}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Описание</label>
+            <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Дата и время</label>
+                <input type="datetime-local" class="form-control"
+                       th:field="*{dateTime}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Длительность (минут)</label>
+                <input type="number" class="form-control"
+                       th:field="*{duration}" min="30" required>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label">Жанр</label>
+                <select class="form-select" th:field="*{genre}" required>
+                    <option th:each="genre : ${T(ru.theater.info.enumModel.Genre).values()}"
+                            th:value="${genre}"
+                            th:text="${genre}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Возрастной рейтинг</label>
+                    <select class="form-select" th:field="*{ageRating}" required>
+                        <option th:each="rating : ${T(ru.theater.info.enumModel.AgeRating).values()}"
+                                th:value="${rating}"
+                                th:text="${rating.displayName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a th:href="@{/admin/performances}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
