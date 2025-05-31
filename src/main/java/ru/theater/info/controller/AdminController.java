@@ -40,7 +40,7 @@ public class AdminController {
             @RequestParam(required = false) Genre genre,
             @RequestParam(defaultValue = "0") int minDuration,
             @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) List<AgeRating> ageRatings, // Новый параметр
+            @RequestParam(required = false) List<AgeRating> ageRatings,
             @RequestParam(defaultValue = "dateTime") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             Model model) {
