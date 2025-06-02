@@ -43,10 +43,14 @@ public class User implements UserDetails{
     public void setPassword(String password) { this.password = password; }
 
     public String getMail() { return mail;}
-    public void setMail(String mail) { this.mail = mail;}
+    public void setMail(String mail) {
+        this.mail = (mail == null || mail.isEmpty()) ? null : mail;
+    }
 
     public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone;}
+    public void setPhone(String phone) {
+        this.phone = (phone == null || phone.isEmpty()) ? null : phone;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
