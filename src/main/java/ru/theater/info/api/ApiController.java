@@ -1,18 +1,15 @@
 package ru.theater.info.api;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import ru.theater.info.enumModel.*;
 import ru.theater.info.dto.PerformanceDto;
 import ru.theater.info.model.Performance;
 import ru.theater.info.service.PerformanceService;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +21,14 @@ import java.util.concurrent.TimeUnit;
 public class ApiController {
 
     private final PerformanceService performanceService;
+
     @Autowired
-    public ApiController(PerformanceService performanceService) { this.performanceService = performanceService; }
+    public ApiController(PerformanceService performanceService) {
+        this.performanceService = performanceService;
+    }
 
     @GetMapping
-    @Cacheable("performance")
+    @Cacheable("performances")
     public ResponseEntity<List<Performance>> getAll() {
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
@@ -36,7 +36,7 @@ public class ApiController {
     }
 
     @GetMapping("/{id}")
-    @Cacheable(value = "performances", key="#id")
+    @Cacheable(value = "performances", key = "#id")
     public ResponseEntity<Performance> getById(@PathVariable Long id) {
         Performance performance = performanceService.getPerformanceById(id);
         return ResponseEntity.ok()
@@ -45,9 +45,55 @@ public class ApiController {
                 .body(performance);
     }
 
+    // HEAD метод для проверки существования и получения ETag
+    @RequestMapping(value = "/{id}", method = RequestMethod.HEAD)
+    public ResponseEntity<?> headById(@PathVariable Long id) {
+        Performance performance = performanceService.getPerformanceById(id);
+        return ResponseEntity.ok()
+                .eTag(createETag(performance))
+                .build();
+    }
+
+    // OPTIONS метод для описания API
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> options() {
+        return ResponseEntity.ok()
+                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT,
+                        HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD,
+                        HttpMethod.OPTIONS)
+                .build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @CacheEvict(value = "performances", allEntries = true)
+    public ResponseEntity<Performance> create(@Valid @RequestBody PerformanceDto dto) {
+        Performance performance = convertToEntity(dto);
+        performanceService.savePerformance(performance);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(performance);
+    }
+
+    // Полное обновление представления
+    @PutMapping("/{id}")
+    @CacheEvict(value = "performances", key = "#id")
+    public ResponseEntity<Performance> update(
+            @PathVariable Long id,
+            @Valid @RequestBody PerformanceDto dto) {
+        Performance performance = convertToEntity(dto);
+        performance.setId(id);
+        Performance updated = performanceService.updatePerformance(id, performance);
+        return ResponseEntity.ok()
+                .eTag(createETag(updated))
+                .body(updated);
+    }
+
+    // Частичное обновление
     @PatchMapping("/{id}")
     @CacheEvict(value = "performances", key = "#id")
-    public ResponseEntity<Performance> patch(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<Performance> patch(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
         Performance existing = performanceService.getPerformanceById(id);
         applyUpdates(existing, updates);
         Performance updated = performanceService.updatePerformance(id, existing);
@@ -56,6 +102,7 @@ public class ApiController {
                 .body(updated);
     }
 
+    // Удаление представления
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(value = "performances", key = "#id")
@@ -66,10 +113,12 @@ public class ApiController {
                 .build();
     }
 
+    // Генерация ETag на основе хеш-кода объекта
     private String createETag(Performance performance) {
         return "\"" + performance.hashCode() + "\"";
     }
 
+    // Конвертация DTO в Entity
     private Performance convertToEntity(PerformanceDto dto) {
         Performance performance = new Performance();
         performance.setTitle(dto.getTitle());
@@ -81,15 +130,28 @@ public class ApiController {
         return performance;
     }
 
+    // Применение частичных обновлений
     private void applyUpdates(Performance performance, Map<String, Object> updates) {
         updates.forEach((key, value) -> {
             switch (key) {
-                case "title": performance.setTitle((String)value); break;
-                case "description": performance.setDescription((String)value); break;
-                case "dateTime": performance.setDateTime((LocalDateTime)value); break;
-                case "duration": performance.setDuration((Integer)value); break;
-                case "genre": performance.setGenre(Genre.valueOf((String)value)); break;
-                case "ageRating": performance.setAgeRating(AgeRating.valueOf((String)value)); break;
+                case "title":
+                    performance.setTitle((String) value);
+                    break;
+                case "description":
+                    performance.setDescription((String) value);
+                    break;
+                case "dateTime":
+                    performance.setDateTime((LocalDateTime) value);
+                    break;
+                case "duration":
+                    performance.setDuration((Integer) value);
+                    break;
+                case "genre":
+                    performance.setGenre(Genre.valueOf((String) value));
+                    break;
+                case "ageRating":
+                    performance.setAgeRating(AgeRating.valueOf((String) value));
+                    break;
             }
         });
     }
